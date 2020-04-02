@@ -7,7 +7,7 @@ use std::path::Path;
 
 #[derive(Deserialize,Debug)]
 pub struct Configuration {
-    paths: Vec<String>
+    pub paths: Vec<String>
 }
 
 pub fn load<P: AsRef<Path>>(path: P) -> Result<Configuration, Box<dyn Error>> {
