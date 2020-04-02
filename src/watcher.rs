@@ -14,7 +14,6 @@ pub fn watch(paths: Vec<String>) -> std::result::Result<(), Box<dyn std::error::
 
   // Add a path to be watched. All files and directories at that path and
   // below will be monitored for changes.
-
   for path in &paths {
     watcher.watch(path, RecursiveMode::Recursive)?;
   }
@@ -25,13 +24,17 @@ pub fn watch(paths: Vec<String>) -> std::result::Result<(), Box<dyn std::error::
     match rx.recv() {
       Ok(event) => {
         match event {
-          DebouncedEvent::NoticeWrite(path)
-          | DebouncedEvent::Create(path)
-          | DebouncedEvent::Write(path) => {
-            send_event_to_service(path)?;
+          DebouncedEvent::NoticeWrite(path) => {
+            send_event_to_service(path, "notice_write".to_owned())?;
+          },
+          DebouncedEvent::Create(path) => {
+            send_event_to_service(path, "create".to_owned())?;
+          },
+          DebouncedEvent::Write(path) => {
+            send_event_to_service(path, "write".to_owned())?;
           }
           DebouncedEvent::Rename(_old_path, new_path) => {
-            send_event_to_service(new_path)?;
+            send_event_to_service(new_path, "rename".to_owned())?;
           }
           _ => {}
         };
@@ -41,9 +44,9 @@ pub fn watch(paths: Vec<String>) -> std::result::Result<(), Box<dyn std::error::
   }
 }
 
-fn send_event_to_service(path: PathBuf) -> std::result::Result<(), Box<dyn std::error::Error>> {
+fn send_event_to_service(path: PathBuf, event_type: String) -> std::result::Result<(), Box<dyn std::error::Error>> {
   let file_information = file_identifier::file_information(path)?;
-  webservice::build_json(file_information)?;
+  webservice::build_json(file_information, event_type)?;
 
   Ok(())
 }

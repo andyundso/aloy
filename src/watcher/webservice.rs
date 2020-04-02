@@ -5,6 +5,7 @@ use serde_json::Result;
 #[derive(Serialize, Deserialize)]
 pub struct WebserviceRequestBody {
   pub id: String,
+  pub event_type: String,
   pub body: DetailedBody,
 }
 
@@ -14,9 +15,10 @@ pub struct DetailedBody {
   pub category: String,
 }
 
-pub fn build_json(file_information: FileInformation) -> Result<()> {
+pub fn build_json(file_information: FileInformation, event_type: String) -> Result<()> {
   let request_body = WebserviceRequestBody {
     id: file_information.id,
+    event_type: event_type,
     body: DetailedBody {
       category: file_information.category,
       path: file_information.path,
