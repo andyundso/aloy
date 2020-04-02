@@ -1,8 +1,12 @@
-use notify::{RecommendedWatcher, Watcher, RecursiveMode};
+use notify::{DebouncedEvent, RecommendedWatcher, RecursiveMode, Watcher};
+use std::path::PathBuf;
 use std::sync::mpsc::channel;
 use std::time::Duration;
 
-pub fn watch(paths: Vec<String>) -> notify::Result<()> {
+mod file_identifier;
+mod webservice;
+
+pub fn watch(paths: Vec<String>) -> std::result::Result<(), Box<dyn std::error::Error>> {
   let (tx, rx) = channel();
 
   // Automatically select the best implementation for your platform.
@@ -19,8 +23,27 @@ pub fn watch(paths: Vec<String>) -> notify::Result<()> {
 
   loop {
     match rx.recv() {
-        Ok(event) => println!("{:?}", event),
-        Err(e) => println!("watch error: {:?}", e),
+      Ok(event) => {
+        match event {
+          DebouncedEvent::NoticeWrite(path)
+          | DebouncedEvent::Create(path)
+          | DebouncedEvent::Write(path) => {
+            send_event_to_service(path)?;
+          }
+          DebouncedEvent::Rename(_old_path, new_path) => {
+            send_event_to_service(new_path)?;
+          }
+          _ => {}
+        };
+      }
+      Err(e) => println!("watch error: {:?}", e),
     }
   }
+}
+
+fn send_event_to_service(path: PathBuf) -> std::result::Result<(), Box<dyn std::error::Error>> {
+  let file_information = file_identifier::file_information(path)?;
+  webservice::build_json(file_information)?;
+
+  Ok(())
 }
