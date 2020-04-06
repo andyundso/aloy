@@ -19,3 +19,4 @@ Aloy expects a configuration file in the project's root (TBC) as a JSON with an 
   * Windows: Event Logs
   * Linux: Some obscure path under /var/log
   * Mac OS X: ?
+* Improve error handling over the whole application

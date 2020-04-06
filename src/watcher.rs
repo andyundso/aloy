@@ -2,6 +2,7 @@ use notify::{DebouncedEvent, RecommendedWatcher, RecursiveMode, Watcher};
 use std::path::PathBuf;
 use std::sync::mpsc::channel;
 use std::time::Duration;
+use std::thread;
 
 mod file_identifier;
 mod webservice;
@@ -25,16 +26,16 @@ pub fn watch() -> std::result::Result<(), Box<dyn std::error::Error>> {
       Ok(event) => {
         match event {
           DebouncedEvent::NoticeWrite(path) => {
-            send_event_to_service(path, "notice_write".to_owned())?;
+            send_event_to_service(path, "notice_write".to_owned());
           },
           DebouncedEvent::Create(path) => {
-            send_event_to_service(path, "create".to_owned())?;
+            send_event_to_service(path, "create".to_owned());
           },
           DebouncedEvent::Write(path) => {
-            send_event_to_service(path, "write".to_owned())?;
+            send_event_to_service(path, "write".to_owned());
           }
           DebouncedEvent::Rename(_old_path, new_path) => {
-            send_event_to_service(new_path, "rename".to_owned())?;
+            send_event_to_service(new_path, "rename".to_owned());
           }
           _ => {}
         };
@@ -44,9 +45,18 @@ pub fn watch() -> std::result::Result<(), Box<dyn std::error::Error>> {
   }
 }
 
-fn send_event_to_service(path: PathBuf, event_type: String) -> std::result::Result<(), Box<dyn std::error::Error>> {
-  let file_information = file_identifier::file_information(path)?;
-  webservice::build_json(file_information, event_type)?;
-
-  Ok(())
+fn send_event_to_service(path: PathBuf, event_type: String) {
+  thread::spawn(move || {
+    match file_identifier::file_information(path) {
+      Ok(file_information) => {
+        webservice::build_json(file_information, event_type);
+        return Ok(());
+      }
+        ,
+      Err(_) => {
+        println!("an error happened");
+        return Err(());
+      },
+    }
+  });
 }
