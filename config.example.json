@@ -1,5 +1,6 @@
 {
   "paths": [
     "~/Documents"
-  ]
+  ],
+  "webservice_url": "http://localhost:4000/api/index/example/2"
 }

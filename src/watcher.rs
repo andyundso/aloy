@@ -6,7 +6,7 @@ use std::time::Duration;
 mod file_identifier;
 mod webservice;
 
-pub fn watch(paths: Vec<String>) -> std::result::Result<(), Box<dyn std::error::Error>> {
+pub fn watch() -> std::result::Result<(), Box<dyn std::error::Error>> {
   let (tx, rx) = channel();
 
   // Automatically select the best implementation for your platform.
@@ -14,7 +14,7 @@ pub fn watch(paths: Vec<String>) -> std::result::Result<(), Box<dyn std::error::
 
   // Add a path to be watched. All files and directories at that path and
   // below will be monitored for changes.
-  for path in &paths {
+  for path in &super::configuration::CONFIGURATION.paths {
     watcher.watch(path, RecursiveMode::Recursive)?;
   }
 
