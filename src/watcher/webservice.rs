@@ -1,6 +1,7 @@
 use super::file_identifier::FileInformation;
 use serde::{Deserialize, Serialize};
 use serde_json::Result;
+use serde_json::json;
 
 #[derive(Serialize, Deserialize)]
 pub struct WebserviceRequestBody {
@@ -15,7 +16,7 @@ pub struct DetailedBody {
   pub category: String,
 }
 
-pub fn build_json(file_information: FileInformation, event_type: String) -> Result<()> {
+pub fn send_json(file_information: FileInformation, event_type: String) -> Result<()> {
   let request_body = WebserviceRequestBody {
     id: file_information.id,
     event_type: event_type,
@@ -25,11 +26,9 @@ pub fn build_json(file_information: FileInformation, event_type: String) -> Resu
     },
   };
 
-  // Serialize it to a JSON string.
-  let j = serde_json::to_string(&request_body)?;
+  // Post body to a webservice
+  ureq::post(&super::super::configuration::CONFIGURATION.webservice_url)
+        .send_json(json!(request_body));
 
-  // Print, write to a file, or send to an HTTP server.
-  println!("{}", j);
-
-  Ok(())
+  return Ok(());
 }

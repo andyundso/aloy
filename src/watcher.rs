@@ -49,7 +49,7 @@ fn send_event_to_service(path: PathBuf, event_type: String) {
   thread::spawn(move || {
     match file_identifier::file_information(path) {
       Ok(file_information) => {
-        webservice::build_json(file_information, event_type);
+        webservice::send_json(file_information, event_type);
         return Ok(());
       }
         ,

@@ -2,6 +2,7 @@ mod watcher;
 
 #[macro_use]
 extern crate lazy_static;
+extern crate ureq;
 
 pub mod configuration {
   mod configuration_loader;

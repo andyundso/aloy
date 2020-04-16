@@ -10,8 +10,6 @@ Aloy expects a configuration file in the project's root (TBC) as a JSON with an 
 
 ## Future features
 
-* Aloy can actually send content to a webservice
-  * Webservice URL is configurable
 * Aloy can handle delete events
 * The config file for Aloy can be set through an environment variable
 * Aloy can sent a bunch of metadata or only paths to the webservice
