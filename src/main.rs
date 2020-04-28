@@ -1,3 +1,5 @@
+#![cfg_attr(all(rustc_is_nightly, windows), feature(windows_by_handle))]
+
 mod watcher;
 
 #[macro_use]

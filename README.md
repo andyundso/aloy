@@ -1,8 +1,14 @@
 # Aloy
 
+[![Build Status](https://travis-ci.org/andyundso/aloy.svg?branch=master)](https://travis-ci.org/andyundso/aloy)
+
 Aloy hunts for machines (watching for files) and passes its loot (meta data) to a merchant (webservice).
 
 (Horizon: Zero Dawn is actually a good game).
+
+## Windows build
+
+The windows version of this package currently only builds against Nightly because the package relies on an unstable feature for gathering a file identifier.
 
 ## Configuration
 
