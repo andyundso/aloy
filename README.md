@@ -4,6 +4,10 @@ Aloy hunts for machines (watching for files) and passes its loot (meta data) to 
 
 (Horizon: Zero Dawn is actually a good game).
 
+## Windows build
+
+The windows version of this package currently only builds against Nightly because the package relies on an unstable feature for gathering a file identifier.
+
 ## Configuration
 
 Aloy expects a configuration file in the project's root (TBC) as a JSON with an array of the paths you want to watch. An example file is present in the project.
