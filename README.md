@@ -1,5 +1,7 @@
 # Aloy
 
+[![Build Status](https://travis-ci.org/andyundso/aloy.svg?branch=master)](https://travis-ci.org/andyundso/aloy)
+
 Aloy hunts for machines (watching for files) and passes its loot (meta data) to a merchant (webservice).
 
 (Horizon: Zero Dawn is actually a good game).
