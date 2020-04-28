@@ -1,0 +1,17 @@
+language: rust
+
+jobs:
+  include:
+    - os: windows
+      rust: 
+      - nightly
+    - os: linux
+      rust: stable
+    - os: linux
+      rust: nightly
+
+cache: cargo
+
+script:
+- cargo build
+- cargo test
