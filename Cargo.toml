@@ -10,7 +10,7 @@ edition = "2018"
 rustc_version = "0.2.3"
 
 [dependencies]
-crossbeam-channel = "0.4.3"
+crossbeam-channel = "0.4.4"
 lazy_static = "1.4.0"
 notify = "4.0.15"
 serde = { version = "1.0", features = ["derive"] }
